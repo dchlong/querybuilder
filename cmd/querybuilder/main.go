@@ -10,6 +10,7 @@ import (
 
 	"github.com/dchlong/querybuilder"
 	"github.com/dchlong/querybuilder/parser"
+	"github.com/dchlong/querybuilder/repository"
 )
 
 const (
