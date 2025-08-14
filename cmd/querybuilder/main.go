@@ -18,17 +18,21 @@ const (
 	usage   = `querybuilder - Generate type-safe query builders for Go structs
 
 USAGE:
-    querybuilder [options] <input-file>
+    querybuilder [options] [<input-file>]
+    querybuilder -input <input-file> [options]
 
 EXAMPLES:
-    # Generate query builder for models.go
+    # Generate query builder for models.go (positional argument)
     querybuilder models.go
 
+    # Generate query builder for models.go (using -input flag)
+    querybuilder -input models.go
+
     # Generate with custom output file
-    querybuilder -output models_querybuilder.go models.go
+    querybuilder -input models.go -output models_querybuilder.go
 
     # Generate with struct name suffix
-    querybuilder -suffix V1 models.go
+    querybuilder -input models.go -suffix V1
 
     # Generate for all Go files in directory
     querybuilder -dir ./models
@@ -94,8 +98,10 @@ func main() {
 func parseFlags() *config {
 	cfg := &config{}
 
+	flag.StringVar(&cfg.inputFile, "input", "", "Input file path")
+	flag.StringVar(&cfg.inputFile, "in", "", "Input file path (short)")
 	flag.StringVar(&cfg.outputFile, "output", "", "Output file path (default: <input>_querybuilder.go)")
-	flag.StringVar(&cfg.outputFile, "o", "", "Output file path (short)")
+	flag.StringVar(&cfg.outputFile, "out", "", "Output file path (short)")
 	flag.StringVar(&cfg.suffix, "suffix", "", "Suffix to append to struct names")
 	flag.StringVar(&cfg.suffix, "s", "", "Suffix to append to struct names (short)")
 	flag.StringVar(&cfg.directory, "dir", "", "Process all Go files in directory")
@@ -111,7 +117,8 @@ func parseFlags() *config {
 	flag.Usage = printUsage
 	flag.Parse()
 
-	if len(flag.Args()) > 0 {
+	// If -in flag not provided, fall back to positional argument
+	if cfg.inputFile == "" && len(flag.Args()) > 0 {
 		cfg.inputFile = flag.Args()[0]
 	}
 
