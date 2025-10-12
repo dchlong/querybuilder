@@ -43,6 +43,36 @@ var (
 
 	// ErrEmptyFieldName indicates that a filter has an empty field name
 	ErrEmptyFieldName = errors.New("empty field name in filter")
+
+	// ErrCreateRecords indicates that record creation failed
+	ErrCreateRecords = errors.New("failed to create records")
+
+	// ErrFindRecord indicates that record lookup failed
+	ErrFindRecord = errors.New("failed to find record")
+
+	// ErrUpdateRecord indicates that record update failed
+	ErrUpdateRecord = errors.New("failed to update record")
+
+	// ErrDeleteRecord indicates that record deletion failed
+	ErrDeleteRecord = errors.New("failed to delete record")
+
+	// ErrNoRecordDeleted indicates that no record was deleted
+	ErrNoRecordDeleted = errors.New("no record was deleted")
+
+	// ErrBuildQuery indicates that query building failed
+	ErrBuildQuery = errors.New("failed to build query")
+
+	// ErrCountRecords indicates that record counting failed
+	ErrCountRecords = errors.New("failed to count records")
+
+	// ErrExistsCheck indicates that exists check failed
+	ErrExistsCheck = errors.New("failed to check record existence")
+
+	// ErrGetDatabase indicates that getting underlying database failed
+	ErrGetDatabase = errors.New("failed to get underlying database")
+
+	// ErrDatabasePing indicates that database ping failed
+	ErrDatabasePing = errors.New("database ping failed")
 )
 
 // Template and formatting errors
