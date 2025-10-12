@@ -32,7 +32,7 @@ func (r *GormRepository[Entity, Filter, Updater]) Create(ctx context.Context, re
 
 	err := r.db.WithContext(ctx).Create(records).Error
 	if err != nil {
-		return fmt.Errorf("create records: %w", err)
+		return errors.Join(ErrCreateRecords, err)
 	}
 
 	return nil
@@ -50,7 +50,7 @@ func (r *GormRepository[Entity, Filter, Updater]) FindOneByID(
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return nil, false, nil
 		}
-		return nil, false, fmt.Errorf("find record by ID %d: %w", id, err)
+		return nil, false, errors.Join(ErrFindRecord, err)
 	}
 
 	return &result, true, nil
@@ -65,7 +65,7 @@ func (r *GormRepository[Entity, Filter, Updater]) FindOne(
 	var result Entity
 	query, err := r.buildQuery(r.db.WithContext(ctx), filter)
 	if err != nil {
-		return nil, false, fmt.Errorf("FindOne build query: %w", err)
+		return nil, false, errors.Join(ErrFindRecord, err)
 	}
 
 	query = r.applyOptions(query, options...)
@@ -75,7 +75,7 @@ func (r *GormRepository[Entity, Filter, Updater]) FindOne(
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return nil, false, nil
 		}
-		return nil, false, fmt.Errorf("find one record: %w", err)
+		return nil, false, errors.Join(ErrFindRecord, err)
 	}
 
 	return &result, true, nil
@@ -97,7 +97,7 @@ func (r *GormRepository[Entity, Filter, Updater]) FindAll(
 
 	err = query.Find(&result).Error
 	if err != nil {
-		return nil, fmt.Errorf("find all records: %w", err)
+		return nil, errors.Join(ErrFindRecord, err)
 	}
 
 	return result, nil
@@ -116,7 +116,41 @@ func (r *GormRepository[Entity, Filter, Updater]) Update(
 
 	result := r.db.WithContext(ctx).Model(record).Updates(changeSet)
 	if result.Error != nil {
-		return fmt.Errorf("update record: %w", result.Error)
+		return errors.Join(ErrUpdateRecord, result.Error)
+	}
+
+	return nil
+}
+
+// Delete implements single record deletion
+func (r *GormRepository[Entity, Filter, Updater]) Delete(
+	ctx context.Context,
+	record *Entity,
+) error {
+	result := r.db.WithContext(ctx).Delete(record)
+	if result.Error != nil {
+		return errors.Join(ErrDeleteRecord, result.Error)
+	}
+
+	if result.RowsAffected == 0 {
+		return ErrNoRecordDeleted
+	}
+
+	return nil
+}
+
+// DeleteByID implements single record deletion by ID
+func (r *GormRepository[Entity, Filter, Updater]) DeleteByID(
+	ctx context.Context,
+	id int64,
+) error {
+	result := r.db.WithContext(ctx).Delete(new(Entity), id)
+	if result.Error != nil {
+		return errors.Join(ErrDeleteRecord, result.Error)
+	}
+
+	if result.RowsAffected == 0 {
+		return ErrNoRecordDeleted
 	}
 
 	return nil
@@ -127,7 +161,7 @@ func (r *GormRepository[Entity, Filter, Updater]) WithTransaction(
 	ctx context.Context,
 	fn func(*GormRepository[Entity, Filter, Updater]) error,
 ) error {
-	return r.db.Transaction(func(tx *gorm.DB) error {
+	return r.db.WithContext(ctx).Transaction(func(tx *gorm.DB) error {
 		txRepo := &GormRepository[Entity, Filter, Updater]{
 			db: tx,
 		}
@@ -151,7 +185,7 @@ func (r *GormRepository[Entity, Filter, Updater]) CreateInBatches(
 
 	result := r.db.WithContext(ctx).CreateInBatches(records, batchSize)
 	if result.Error != nil {
-		return fmt.Errorf("create records in batches: %w", result.Error)
+		return errors.Join(ErrCreateRecords, result.Error)
 	}
 
 	return nil
@@ -175,7 +209,7 @@ func (r *GormRepository[Entity, Filter, Updater]) UpdateWithFilter(
 
 	result := query.Model(new(Entity)).Updates(changeSet)
 	if result.Error != nil {
-		return 0, fmt.Errorf("update records with filter: %w", result.Error)
+		return 0, errors.Join(ErrUpdateRecord, result.Error)
 	}
 
 	return result.RowsAffected, nil
@@ -193,7 +227,7 @@ func (r *GormRepository[Entity, Filter, Updater]) DeleteWithFilter(
 
 	result := query.Delete(new(Entity))
 	if result.Error != nil {
-		return 0, fmt.Errorf("delete records with filter: %w", result.Error)
+		return 0, errors.Join(ErrDeleteRecord, result.Error)
 	}
 
 	return result.RowsAffected, nil
@@ -212,7 +246,7 @@ func (r *GormRepository[Entity, Filter, Updater]) Count(
 	var count int64
 	err = query.Model(new(Entity)).Count(&count).Error
 	if err != nil {
-		return 0, fmt.Errorf("count records: %w", err)
+		return 0, errors.Join(ErrCountRecords, err)
 	}
 
 	return count, nil
@@ -225,7 +259,7 @@ func (r *GormRepository[Entity, Filter, Updater]) Exists(
 ) (bool, error) {
 	count, err := r.Count(ctx, filter)
 	if err != nil {
-		return false, fmt.Errorf("exists check: %w", err)
+		return false, errors.Join(ErrExistsCheck, err)
 	}
 	return count > 0, nil
 }
@@ -316,3 +350,6 @@ func (r *GormRepository[Entity, Filter, Updater]) Health(ctx context.Context) er
 
 	return nil
 }
+
+// Compile-time verification that GormRepository implements Repository interface
+var _ Repository[any, EntityFilter, EntityUpdater] = (*GormRepository[any, EntityFilter, EntityUpdater])(nil)
