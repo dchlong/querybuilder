@@ -122,6 +122,40 @@ func (r *GormRepository[Entity, Filter, Updater]) Update(
 	return nil
 }
 
+// Delete implements single record deletion
+func (r *GormRepository[Entity, Filter, Updater]) Delete(
+	ctx context.Context,
+	record *Entity,
+) error {
+	result := r.db.WithContext(ctx).Delete(record)
+	if result.Error != nil {
+		return fmt.Errorf("delete record: %w", result.Error)
+	}
+
+	if result.RowsAffected == 0 {
+		return errors.New("no record was deleted")
+	}
+
+	return nil
+}
+
+// DeleteByID implements single record deletion by ID
+func (r *GormRepository[Entity, Filter, Updater]) DeleteByID(
+	ctx context.Context,
+	id int64,
+) error {
+	result := r.db.WithContext(ctx).Delete(new(Entity), id)
+	if result.Error != nil {
+		return fmt.Errorf("delete record by ID %d: %w", id, result.Error)
+	}
+
+	if result.RowsAffected == 0 {
+		return errors.New("no record was deleted")
+	}
+
+	return nil
+}
+
 // WithTransaction executes a function within a database transaction
 func (r *GormRepository[Entity, Filter, Updater]) WithTransaction(
 	ctx context.Context,
@@ -316,3 +350,6 @@ func (r *GormRepository[Entity, Filter, Updater]) Health(ctx context.Context) er
 
 	return nil
 }
+
+// Compile-time verification that GormRepository implements Repository interface
+var _ Repository[any, EntityFilter, EntityUpdater] = (*GormRepository[any, EntityFilter, EntityUpdater])(nil)
