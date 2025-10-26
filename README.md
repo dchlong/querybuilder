@@ -572,9 +572,10 @@ func (s *ProductService) UpdateCategoryPricing(ctx context.Context, categoryID i
 |------|-----------|---------|
 | `string` | Eq, Ne, Like, NotLike, In, NotIn, Lt, Gt, Lte, Gte | `NameLike("%widget%")` |
 | `int`, `int64`, `float64` | Eq, Ne, Lt, Gt, Lte, Gte, In, NotIn | `PriceGt(10.0)` |
-| `time.Time` | Eq, Ne, Lt, Gt, Lte, Gte, In, NotIn | `CreatedAtGte(startDate)` |
+| `time.Time`, `*time.Time` | Eq, Ne, Lt, Gt, Lte, Gte, In, NotIn | `CreatedAtGte(startDate)` |
+| `*time.Time` (pointer) | IsNull, IsNotNull (additional) | `UpdatedAtIsNull()` |
 | `bool` | Eq, Ne | `IsActiveEq(true)` |
-| `*T` (pointers) | Eq, Ne, IsNull, IsNotNull | `UpdatedAtIsNull()` |
+| `*T` (other pointers) | Eq, Ne, IsNull, IsNotNull | `DescriptionIsNull()` |
 
 ### Updatable-Only Types (Can be set but not filtered)
 

@@ -361,9 +361,11 @@ func (g InfoGenerator) processPointerType(f Field, t *types.Pointer, baseInfo Ba
 
 	return &Info{
 		BaseInfo: BaseInfo{
-			Name:     baseInfo.Name,
-			TypeName: fmt.Sprintf("*%s", pointedField.TypeName),
-			DBName:   baseInfo.DBName,
+			Name:      baseInfo.Name,
+			TypeName:  fmt.Sprintf("*%s", pointedField.TypeName),
+			DBName:    baseInfo.DBName,
+			IsTime:    pointedField.IsTime,    // Preserve IsTime flag from pointed-to type
+			IsNumeric: pointedField.IsNumeric, // Preserve IsNumeric flag from pointed-to type
 		},
 		IsPointer: true,
 		pointed:   &pointedField.BaseInfo,

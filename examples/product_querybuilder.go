@@ -778,24 +778,68 @@ func (p *ProductFilters) UpdatedAtNe(updatedAt *time.Time) *ProductFilters {
 	return p
 }
 
-// UpdatedAtIsNull filters by UpdatedAt is null check
-func (p *ProductFilters) UpdatedAtIsNull() *ProductFilters {
+// UpdatedAtLt filters by UpdatedAt lt
+func (p *ProductFilters) UpdatedAtLt(updatedAt *time.Time) *ProductFilters {
 	p.filters[ProductDBSchema.UpdatedAt] = append(p.filters[ProductDBSchema.UpdatedAt],
 		&repository.Filter{
 			Field:    string(ProductDBSchema.UpdatedAt),
-			Operator: repository.OperatorIsNull,
-			Value:    nil,
+			Operator: repository.OperatorLessThan,
+			Value:    updatedAt,
 		})
 	return p
 }
 
-// UpdatedAtIsNotNull filters by UpdatedAt is null check
-func (p *ProductFilters) UpdatedAtIsNotNull() *ProductFilters {
+// UpdatedAtGt filters by UpdatedAt gt
+func (p *ProductFilters) UpdatedAtGt(updatedAt *time.Time) *ProductFilters {
 	p.filters[ProductDBSchema.UpdatedAt] = append(p.filters[ProductDBSchema.UpdatedAt],
 		&repository.Filter{
 			Field:    string(ProductDBSchema.UpdatedAt),
-			Operator: repository.OperatorIsNotNull,
-			Value:    nil,
+			Operator: repository.OperatorGreaterThan,
+			Value:    updatedAt,
+		})
+	return p
+}
+
+// UpdatedAtLte filters by UpdatedAt lte
+func (p *ProductFilters) UpdatedAtLte(updatedAt *time.Time) *ProductFilters {
+	p.filters[ProductDBSchema.UpdatedAt] = append(p.filters[ProductDBSchema.UpdatedAt],
+		&repository.Filter{
+			Field:    string(ProductDBSchema.UpdatedAt),
+			Operator: repository.OperatorLessThanOrEqual,
+			Value:    updatedAt,
+		})
+	return p
+}
+
+// UpdatedAtGte filters by UpdatedAt gte
+func (p *ProductFilters) UpdatedAtGte(updatedAt *time.Time) *ProductFilters {
+	p.filters[ProductDBSchema.UpdatedAt] = append(p.filters[ProductDBSchema.UpdatedAt],
+		&repository.Filter{
+			Field:    string(ProductDBSchema.UpdatedAt),
+			Operator: repository.OperatorGreaterThanOrEqual,
+			Value:    updatedAt,
+		})
+	return p
+}
+
+// UpdatedAtIn filters by UpdatedAt in list
+func (p *ProductFilters) UpdatedAtIn(updatedAts ...*time.Time) *ProductFilters {
+	p.filters[ProductDBSchema.UpdatedAt] = append(p.filters[ProductDBSchema.UpdatedAt],
+		&repository.Filter{
+			Field:    string(ProductDBSchema.UpdatedAt),
+			Operator: repository.OperatorIn,
+			Value:    updatedAts,
+		})
+	return p
+}
+
+// UpdatedAtNotIn filters by UpdatedAt in list
+func (p *ProductFilters) UpdatedAtNotIn(updatedAts ...*time.Time) *ProductFilters {
+	p.filters[ProductDBSchema.UpdatedAt] = append(p.filters[ProductDBSchema.UpdatedAt],
+		&repository.Filter{
+			Field:    string(ProductDBSchema.UpdatedAt),
+			Operator: repository.OperatorNotIn,
+			Value:    updatedAts,
 		})
 	return p
 }
