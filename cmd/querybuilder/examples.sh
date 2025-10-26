@@ -54,8 +54,8 @@ success "Generated with V1 suffix (ProductV1Filters, ProductV1Updater, etc.)"
 
 # Example 4: Short flags demonstration
 header "Example 4: Short Flags Usage"
-log "Using short flags: -o (output), -s (suffix), -v (version)"
-$QUERYBUILDER -o examples/product_short.go -s V2 examples/product.go
+log "Using short flags: -out (output), -s (suffix), -v (version)"
+$QUERYBUILDER -out examples/product_short.go -s V2 examples/product.go
 success "Generated using short flags"
 
 # Example 5: Directory processing with short flag

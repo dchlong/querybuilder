@@ -182,11 +182,12 @@ build: generate
 - `float64` - Numeric operations with decimal support
 - `bool` - Boolean operations (eq, ne)
 - `time.Time` - Time operations (eq, ne, lt, gt, in, etc.)
+- `*time.Time` - Nullable timestamp with time operations (eq, ne, lt, gt, in, etc.) and null checks (IsNull/IsNotNull)
 
 ### Pointer Types (Nullable)
 - `*string` - Nullable string with IsNull/IsNotNull operations
-- `*time.Time` - Nullable timestamp with IsNull/IsNotNull operations
 - `*int64` - Nullable integer with IsNull/IsNotNull operations
+- Other pointer types - Basic operations with null checks
 
 ### JSON Types
 - `[]string` - JSON array stored as string
