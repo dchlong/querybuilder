@@ -43,11 +43,12 @@ func (ft FieldType) String() string {
 
 // Field represents a struct field with its metadata
 type Field struct {
-	Name     string    // Go field name
-	DBName   string    // Database column name
-	Type     FieldType // Field type classification
-	TypeName string    // Go type name
-	GoType   string    // Full Go type (e.g., "*time.Time")
+	Name          string     // Go field name
+	DBName        string     // Database column name
+	Type          FieldType  // Field type classification
+	TypeName      string     // Go type name
+	GoType        string     // Full Go type (e.g., "*time.Time")
+	PointedToType *FieldType // For pointers, the type being pointed to (e.g., FieldTypeTime for *time.Time)
 }
 
 // IsFilterable returns true if the field can be used in filters
@@ -84,10 +85,41 @@ func (f Field) SupportedOperators() []repository.Operator {
 			repository.OperatorNotIn,
 		)
 	case FieldTypePointer:
-		return append(base,
+		// Pointers get null operations
+		ops := append(base,
 			repository.OperatorIsNull,
 			repository.OperatorIsNotNull,
 		)
+
+		// If pointer points to a specific type, also add that type's operations
+		if f.PointedToType != nil {
+			switch *f.PointedToType {
+			case FieldTypeNumeric, FieldTypeTime:
+				// Add comparison and range operations
+				ops = append(ops,
+					repository.OperatorLessThan,
+					repository.OperatorGreaterThan,
+					repository.OperatorLessThanOrEqual,
+					repository.OperatorGreaterThanOrEqual,
+					repository.OperatorIn,
+					repository.OperatorNotIn,
+				)
+			case FieldTypeString:
+				// Add string operations
+				ops = append(ops,
+					repository.OperatorLike,
+					repository.OperatorNotLike,
+					repository.OperatorIn,
+					repository.OperatorNotIn,
+					repository.OperatorLessThan,
+					repository.OperatorGreaterThan,
+					repository.OperatorLessThanOrEqual,
+					repository.OperatorGreaterThanOrEqual,
+				)
+			}
+		}
+
+		return ops
 	default:
 		return base
 	}

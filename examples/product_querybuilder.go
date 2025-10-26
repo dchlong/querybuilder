@@ -382,6 +382,94 @@ func (p *ProductFilters) DescriptionIsNotNull() *ProductFilters {
 	return p
 }
 
+// DescriptionLike filters by Description like
+func (p *ProductFilters) DescriptionLike(description *string) *ProductFilters {
+	p.filters[ProductDBSchema.Description] = append(p.filters[ProductDBSchema.Description],
+		&repository.Filter{
+			Field:    string(ProductDBSchema.Description),
+			Operator: repository.OperatorLike,
+			Value:    description,
+		})
+	return p
+}
+
+// DescriptionNotLike filters by Description notlike
+func (p *ProductFilters) DescriptionNotLike(description *string) *ProductFilters {
+	p.filters[ProductDBSchema.Description] = append(p.filters[ProductDBSchema.Description],
+		&repository.Filter{
+			Field:    string(ProductDBSchema.Description),
+			Operator: repository.OperatorNotLike,
+			Value:    description,
+		})
+	return p
+}
+
+// DescriptionIn filters by Description in list
+func (p *ProductFilters) DescriptionIn(descriptions ...*string) *ProductFilters {
+	p.filters[ProductDBSchema.Description] = append(p.filters[ProductDBSchema.Description],
+		&repository.Filter{
+			Field:    string(ProductDBSchema.Description),
+			Operator: repository.OperatorIn,
+			Value:    descriptions,
+		})
+	return p
+}
+
+// DescriptionNotIn filters by Description in list
+func (p *ProductFilters) DescriptionNotIn(descriptions ...*string) *ProductFilters {
+	p.filters[ProductDBSchema.Description] = append(p.filters[ProductDBSchema.Description],
+		&repository.Filter{
+			Field:    string(ProductDBSchema.Description),
+			Operator: repository.OperatorNotIn,
+			Value:    descriptions,
+		})
+	return p
+}
+
+// DescriptionLt filters by Description lt
+func (p *ProductFilters) DescriptionLt(description *string) *ProductFilters {
+	p.filters[ProductDBSchema.Description] = append(p.filters[ProductDBSchema.Description],
+		&repository.Filter{
+			Field:    string(ProductDBSchema.Description),
+			Operator: repository.OperatorLessThan,
+			Value:    description,
+		})
+	return p
+}
+
+// DescriptionGt filters by Description gt
+func (p *ProductFilters) DescriptionGt(description *string) *ProductFilters {
+	p.filters[ProductDBSchema.Description] = append(p.filters[ProductDBSchema.Description],
+		&repository.Filter{
+			Field:    string(ProductDBSchema.Description),
+			Operator: repository.OperatorGreaterThan,
+			Value:    description,
+		})
+	return p
+}
+
+// DescriptionLte filters by Description lte
+func (p *ProductFilters) DescriptionLte(description *string) *ProductFilters {
+	p.filters[ProductDBSchema.Description] = append(p.filters[ProductDBSchema.Description],
+		&repository.Filter{
+			Field:    string(ProductDBSchema.Description),
+			Operator: repository.OperatorLessThanOrEqual,
+			Value:    description,
+		})
+	return p
+}
+
+// DescriptionGte filters by Description gte
+func (p *ProductFilters) DescriptionGte(description *string) *ProductFilters {
+	p.filters[ProductDBSchema.Description] = append(p.filters[ProductDBSchema.Description],
+		&repository.Filter{
+			Field:    string(ProductDBSchema.Description),
+			Operator: repository.OperatorGreaterThanOrEqual,
+			Value:    description,
+		})
+	return p
+}
+
 // PriceEq filters by Price eq
 func (p *ProductFilters) PriceEq(price float64) *ProductFilters {
 	p.filters[ProductDBSchema.Price] = append(p.filters[ProductDBSchema.Price],
@@ -774,6 +862,28 @@ func (p *ProductFilters) UpdatedAtNe(updatedAt *time.Time) *ProductFilters {
 			Field:    string(ProductDBSchema.UpdatedAt),
 			Operator: repository.OperatorNotEqual,
 			Value:    updatedAt,
+		})
+	return p
+}
+
+// UpdatedAtIsNull filters by UpdatedAt is null check
+func (p *ProductFilters) UpdatedAtIsNull() *ProductFilters {
+	p.filters[ProductDBSchema.UpdatedAt] = append(p.filters[ProductDBSchema.UpdatedAt],
+		&repository.Filter{
+			Field:    string(ProductDBSchema.UpdatedAt),
+			Operator: repository.OperatorIsNull,
+			Value:    nil,
+		})
+	return p
+}
+
+// UpdatedAtIsNotNull filters by UpdatedAt is null check
+func (p *ProductFilters) UpdatedAtIsNotNull() *ProductFilters {
+	p.filters[ProductDBSchema.UpdatedAt] = append(p.filters[ProductDBSchema.UpdatedAt],
+		&repository.Filter{
+			Field:    string(ProductDBSchema.UpdatedAt),
+			Operator: repository.OperatorIsNotNull,
+			Value:    nil,
 		})
 	return p
 }

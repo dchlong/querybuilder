@@ -43,19 +43,34 @@ func (c *Converter) ConvertStruct(s ParsedStruct) domain.Struct {
 // convertField converts field.Info to domain.Field.
 // Maps all relevant field metadata from the parsed field info.
 func (c *Converter) convertField(fi field.Info) domain.Field {
-	return domain.Field{
+	domainField := domain.Field{
 		Name:     fi.Name,
 		DBName:   fi.DBName,
 		Type:     c.convertFieldType(fi),
 		TypeName: fi.TypeName,
 		GoType:   fi.GetTypeName(), // Use full type name including generics
 	}
+
+	// For pointers, determine the type being pointed to
+	if fi.IsPointer {
+		pointed := fi.GetPointed()
+		pointedType := c.convertFieldType(pointed)
+		domainField.PointedToType = &pointedType
+	}
+
+	return domainField
 }
 
 // convertFieldType converts field.Info to domain.FieldType.
 // Uses a priority-based approach where more specific types take precedence.
 func (c *Converter) convertFieldType(fi field.Info) domain.FieldType {
-	// Handle special types first (most specific)
+	// Handle pointer types first to preserve pointer operations
+	// (e.g., *time.Time should be FieldTypePointer, not FieldTypeTime)
+	if fi.IsPointer {
+		return domain.FieldTypePointer
+	}
+
+	// Handle special types
 	if fi.IsTime {
 		return domain.FieldTypeTime
 	}
@@ -69,11 +84,6 @@ func (c *Converter) convertFieldType(fi field.Info) domain.FieldType {
 	}
 	if fi.IsStruct {
 		return domain.FieldTypeStruct
-	}
-
-	// Handle pointer types
-	if fi.IsPointer {
-		return domain.FieldTypePointer
 	}
 
 	// Handle basic types

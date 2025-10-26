@@ -182,12 +182,18 @@ build: generate
 - `float64` - Numeric operations with decimal support
 - `bool` - Boolean operations (eq, ne)
 - `time.Time` - Time operations (eq, ne, lt, gt, in, etc.)
-- `*time.Time` - Nullable timestamp with time operations (eq, ne, lt, gt, in, etc.) and null checks (IsNull/IsNotNull)
 
-### Pointer Types (Nullable)
-- `*string` - Nullable string with IsNull/IsNotNull operations
-- `*int64` - Nullable integer with IsNull/IsNotNull operations
-- Other pointer types - Basic operations with null checks
+### Pointer Types (Inherit underlying type operations + null checks)
+
+Pointer types automatically support all operations from their underlying type, plus null checking:
+
+- `*time.Time` - All time operations + IsNull/IsNotNull
+  - Example: `UpdatedAtGte(date)`, `UpdatedAtLt(deadline)`, `UpdatedAtIsNull()`
+- `*string` - All string operations + IsNull/IsNotNull
+  - Example: `DescriptionLike("%test%")`, `DescriptionIsNotNull()`
+- `*int64`, `*float64` - All numeric operations + IsNull/IsNotNull
+  - Example: `OptionalPriceGt(10.0)`, `OptionalPriceIsNull()`
+- `*bool` - Boolean operations + IsNull/IsNotNull
 
 ### JSON Types
 - `[]string` - JSON array stored as string
