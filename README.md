@@ -572,10 +572,19 @@ func (s *ProductService) UpdateCategoryPricing(ctx context.Context, categoryID i
 |------|-----------|---------|
 | `string` | Eq, Ne, Like, NotLike, In, NotIn, Lt, Gt, Lte, Gte | `NameLike("%widget%")` |
 | `int`, `int64`, `float64` | Eq, Ne, Lt, Gt, Lte, Gte, In, NotIn | `PriceGt(10.0)` |
-| `time.Time`, `*time.Time` | Eq, Ne, Lt, Gt, Lte, Gte, In, NotIn | `CreatedAtGte(startDate)` |
-| `*time.Time` (pointer) | IsNull, IsNotNull (additional) | `UpdatedAtIsNull()` |
+| `time.Time` | Eq, Ne, Lt, Gt, Lte, Gte, In, NotIn | `CreatedAtGte(startDate)` |
 | `bool` | Eq, Ne | `IsActiveEq(true)` |
-| `*T` (other pointers) | Eq, Ne, IsNull, IsNotNull | `DescriptionIsNull()` |
+
+### Pointer Types (Inherit underlying type operations + null checks)
+
+Pointer types automatically support all operations from their underlying type, plus null checking operations:
+
+| Type | Operators | Example |
+|------|-----------|---------|
+| `*time.Time` | Time operations + IsNull, IsNotNull | `UpdatedAtGte(date)`, `UpdatedAtLt(deadline)`, `UpdatedAtIsNull()` |
+| `*string` | String operations + IsNull, IsNotNull | `DescriptionLike("%test%")`, `DescriptionIsNotNull()` |
+| `*int64`, `*float64` | Numeric operations + IsNull, IsNotNull | `OptionalPriceGt(10.0)`, `OptionalPriceIsNull()` |
+| `*bool` | Boolean operations + IsNull, IsNotNull | `OptionalFlagEq(true)`, `OptionalFlagIsNull()` |
 
 ### Updatable-Only Types (Can be set but not filtered)
 
