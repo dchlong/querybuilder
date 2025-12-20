@@ -382,94 +382,6 @@ func (p *ProductFilters) DescriptionIsNotNull() *ProductFilters {
 	return p
 }
 
-// DescriptionLike filters by Description like
-func (p *ProductFilters) DescriptionLike(description *string) *ProductFilters {
-	p.filters[ProductDBSchema.Description] = append(p.filters[ProductDBSchema.Description],
-		&repository.Filter{
-			Field:    string(ProductDBSchema.Description),
-			Operator: repository.OperatorLike,
-			Value:    description,
-		})
-	return p
-}
-
-// DescriptionNotLike filters by Description notlike
-func (p *ProductFilters) DescriptionNotLike(description *string) *ProductFilters {
-	p.filters[ProductDBSchema.Description] = append(p.filters[ProductDBSchema.Description],
-		&repository.Filter{
-			Field:    string(ProductDBSchema.Description),
-			Operator: repository.OperatorNotLike,
-			Value:    description,
-		})
-	return p
-}
-
-// DescriptionIn filters by Description in list
-func (p *ProductFilters) DescriptionIn(descriptions ...*string) *ProductFilters {
-	p.filters[ProductDBSchema.Description] = append(p.filters[ProductDBSchema.Description],
-		&repository.Filter{
-			Field:    string(ProductDBSchema.Description),
-			Operator: repository.OperatorIn,
-			Value:    descriptions,
-		})
-	return p
-}
-
-// DescriptionNotIn filters by Description in list
-func (p *ProductFilters) DescriptionNotIn(descriptions ...*string) *ProductFilters {
-	p.filters[ProductDBSchema.Description] = append(p.filters[ProductDBSchema.Description],
-		&repository.Filter{
-			Field:    string(ProductDBSchema.Description),
-			Operator: repository.OperatorNotIn,
-			Value:    descriptions,
-		})
-	return p
-}
-
-// DescriptionLt filters by Description lt
-func (p *ProductFilters) DescriptionLt(description *string) *ProductFilters {
-	p.filters[ProductDBSchema.Description] = append(p.filters[ProductDBSchema.Description],
-		&repository.Filter{
-			Field:    string(ProductDBSchema.Description),
-			Operator: repository.OperatorLessThan,
-			Value:    description,
-		})
-	return p
-}
-
-// DescriptionGt filters by Description gt
-func (p *ProductFilters) DescriptionGt(description *string) *ProductFilters {
-	p.filters[ProductDBSchema.Description] = append(p.filters[ProductDBSchema.Description],
-		&repository.Filter{
-			Field:    string(ProductDBSchema.Description),
-			Operator: repository.OperatorGreaterThan,
-			Value:    description,
-		})
-	return p
-}
-
-// DescriptionLte filters by Description lte
-func (p *ProductFilters) DescriptionLte(description *string) *ProductFilters {
-	p.filters[ProductDBSchema.Description] = append(p.filters[ProductDBSchema.Description],
-		&repository.Filter{
-			Field:    string(ProductDBSchema.Description),
-			Operator: repository.OperatorLessThanOrEqual,
-			Value:    description,
-		})
-	return p
-}
-
-// DescriptionGte filters by Description gte
-func (p *ProductFilters) DescriptionGte(description *string) *ProductFilters {
-	p.filters[ProductDBSchema.Description] = append(p.filters[ProductDBSchema.Description],
-		&repository.Filter{
-			Field:    string(ProductDBSchema.Description),
-			Operator: repository.OperatorGreaterThanOrEqual,
-			Value:    description,
-		})
-	return p
-}
-
 // PriceEq filters by Price eq
 func (p *ProductFilters) PriceEq(price float64) *ProductFilters {
 	p.filters[ProductDBSchema.Price] = append(p.filters[ProductDBSchema.Price],
@@ -866,28 +778,6 @@ func (p *ProductFilters) UpdatedAtNe(updatedAt *time.Time) *ProductFilters {
 	return p
 }
 
-// UpdatedAtIsNull filters by UpdatedAt is null check
-func (p *ProductFilters) UpdatedAtIsNull() *ProductFilters {
-	p.filters[ProductDBSchema.UpdatedAt] = append(p.filters[ProductDBSchema.UpdatedAt],
-		&repository.Filter{
-			Field:    string(ProductDBSchema.UpdatedAt),
-			Operator: repository.OperatorIsNull,
-			Value:    nil,
-		})
-	return p
-}
-
-// UpdatedAtIsNotNull filters by UpdatedAt is null check
-func (p *ProductFilters) UpdatedAtIsNotNull() *ProductFilters {
-	p.filters[ProductDBSchema.UpdatedAt] = append(p.filters[ProductDBSchema.UpdatedAt],
-		&repository.Filter{
-			Field:    string(ProductDBSchema.UpdatedAt),
-			Operator: repository.OperatorIsNotNull,
-			Value:    nil,
-		})
-	return p
-}
-
 // UpdatedAtLt filters by UpdatedAt lt
 func (p *ProductFilters) UpdatedAtLt(updatedAt *time.Time) *ProductFilters {
 	p.filters[ProductDBSchema.UpdatedAt] = append(p.filters[ProductDBSchema.UpdatedAt],
@@ -950,6 +840,94 @@ func (p *ProductFilters) UpdatedAtNotIn(updatedAts ...*time.Time) *ProductFilter
 			Field:    string(ProductDBSchema.UpdatedAt),
 			Operator: repository.OperatorNotIn,
 			Value:    updatedAts,
+		})
+	return p
+}
+
+// TestTimeEq filters by TestTime eq
+func (p *ProductFilters) TestTimeEq(testTime TestTime) *ProductFilters {
+	p.filters[ProductDBSchema.TestTime] = append(p.filters[ProductDBSchema.TestTime],
+		&repository.Filter{
+			Field:    string(ProductDBSchema.TestTime),
+			Operator: repository.OperatorEqual,
+			Value:    testTime,
+		})
+	return p
+}
+
+// TestTimeNe filters by TestTime ne
+func (p *ProductFilters) TestTimeNe(testTime TestTime) *ProductFilters {
+	p.filters[ProductDBSchema.TestTime] = append(p.filters[ProductDBSchema.TestTime],
+		&repository.Filter{
+			Field:    string(ProductDBSchema.TestTime),
+			Operator: repository.OperatorNotEqual,
+			Value:    testTime,
+		})
+	return p
+}
+
+// TestTimeLt filters by TestTime lt
+func (p *ProductFilters) TestTimeLt(testTime TestTime) *ProductFilters {
+	p.filters[ProductDBSchema.TestTime] = append(p.filters[ProductDBSchema.TestTime],
+		&repository.Filter{
+			Field:    string(ProductDBSchema.TestTime),
+			Operator: repository.OperatorLessThan,
+			Value:    testTime,
+		})
+	return p
+}
+
+// TestTimeGt filters by TestTime gt
+func (p *ProductFilters) TestTimeGt(testTime TestTime) *ProductFilters {
+	p.filters[ProductDBSchema.TestTime] = append(p.filters[ProductDBSchema.TestTime],
+		&repository.Filter{
+			Field:    string(ProductDBSchema.TestTime),
+			Operator: repository.OperatorGreaterThan,
+			Value:    testTime,
+		})
+	return p
+}
+
+// TestTimeLte filters by TestTime lte
+func (p *ProductFilters) TestTimeLte(testTime TestTime) *ProductFilters {
+	p.filters[ProductDBSchema.TestTime] = append(p.filters[ProductDBSchema.TestTime],
+		&repository.Filter{
+			Field:    string(ProductDBSchema.TestTime),
+			Operator: repository.OperatorLessThanOrEqual,
+			Value:    testTime,
+		})
+	return p
+}
+
+// TestTimeGte filters by TestTime gte
+func (p *ProductFilters) TestTimeGte(testTime TestTime) *ProductFilters {
+	p.filters[ProductDBSchema.TestTime] = append(p.filters[ProductDBSchema.TestTime],
+		&repository.Filter{
+			Field:    string(ProductDBSchema.TestTime),
+			Operator: repository.OperatorGreaterThanOrEqual,
+			Value:    testTime,
+		})
+	return p
+}
+
+// TestTimeIn filters by TestTime in list
+func (p *ProductFilters) TestTimeIn(testTimes ...TestTime) *ProductFilters {
+	p.filters[ProductDBSchema.TestTime] = append(p.filters[ProductDBSchema.TestTime],
+		&repository.Filter{
+			Field:    string(ProductDBSchema.TestTime),
+			Operator: repository.OperatorIn,
+			Value:    testTimes,
+		})
+	return p
+}
+
+// TestTimeNotIn filters by TestTime in list
+func (p *ProductFilters) TestTimeNotIn(testTimes ...TestTime) *ProductFilters {
+	p.filters[ProductDBSchema.TestTime] = append(p.filters[ProductDBSchema.TestTime],
+		&repository.Filter{
+			Field:    string(ProductDBSchema.TestTime),
+			Operator: repository.OperatorNotIn,
+			Value:    testTimes,
 		})
 	return p
 }
@@ -1040,6 +1018,12 @@ func (p *ProductUpdater) SetCreatedAt(createdAt time.Time) *ProductUpdater {
 // SetUpdatedAt sets the UpdatedAt field for update
 func (p *ProductUpdater) SetUpdatedAt(updatedAt *time.Time) *ProductUpdater {
 	p.fields[string(ProductDBSchema.UpdatedAt)] = updatedAt
+	return p
+}
+
+// SetTestTime sets the TestTime field for update
+func (p *ProductUpdater) SetTestTime(testTime TestTime) *ProductUpdater {
+	p.fields[string(ProductDBSchema.TestTime)] = testTime
 	return p
 }
 
@@ -1280,6 +1264,28 @@ func (p *ProductOptions) OrderByUpdatedAtDesc() *ProductOptions {
 	return p
 }
 
+// OrderByTestTimeAsc orders results by TestTime asc
+func (p *ProductOptions) OrderByTestTimeAsc() *ProductOptions {
+	p.options = append(p.options, func(options *repository.Options) {
+		options.SortFields = append(options.SortFields, &repository.SortField{
+			Field:     string(ProductDBSchema.TestTime),
+			Direction: "asc",
+		})
+	})
+	return p
+}
+
+// OrderByTestTimeDesc orders results by TestTime desc
+func (p *ProductOptions) OrderByTestTimeDesc() *ProductOptions {
+	p.options = append(p.options, func(options *repository.Options) {
+		options.SortFields = append(options.SortFields, &repository.SortField{
+			Field:     string(ProductDBSchema.TestTime),
+			Direction: "desc",
+		})
+	})
+	return p
+}
+
 // ProductDBSchemaField represents database field names
 type ProductDBSchemaField string
 
@@ -1302,6 +1308,7 @@ var ProductDBSchema = struct {
 	Attributes  ProductDBSchemaField
 	CreatedAt   ProductDBSchemaField
 	UpdatedAt   ProductDBSchemaField
+	TestTime    ProductDBSchemaField
 }{
 	ID:          ProductDBSchemaField("id"),
 	Name:        ProductDBSchemaField("name"),
@@ -1315,4 +1322,5 @@ var ProductDBSchema = struct {
 	Attributes:  ProductDBSchemaField("attributes"),
 	CreatedAt:   ProductDBSchemaField("created_at"),
 	UpdatedAt:   ProductDBSchemaField("updated_at"),
+	TestTime:    ProductDBSchemaField("test_time"),
 }

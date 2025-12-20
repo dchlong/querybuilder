@@ -18,6 +18,7 @@ type TimeTypePattern struct {
 // DefaultTimeTypes contains the built-in time type patterns.
 var DefaultTimeTypes = []TimeTypePattern{
 	{Pattern: "time.Time", IsNumeric: true},
+	{Pattern: "struct{wall uint64; ext int64; loc *time.Location}", IsNumeric: true}, // time.Time underlying struct
 	{Pattern: "datatypes.Date", IsNumeric: true},
 	{Pattern: "datatypes.Time", IsNumeric: true},
 	{Pattern: "datatypes.DateTime", IsNumeric: true},

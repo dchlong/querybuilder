@@ -6,6 +6,8 @@ import (
 	"gorm.io/datatypes"
 )
 
+type TestTime time.Time
+
 // Product represents an e-commerce product with querybuilder annotation
 //
 //gen:querybuilder
@@ -22,6 +24,7 @@ type Product struct {
 	Attributes  datatypes.JSONType[*Attributes] `json:"attributes"` // JSON object
 	CreatedAt   time.Time                       `json:"created_at"`
 	UpdatedAt   *time.Time                      `json:"updated_at"`
+	TestTime    TestTime                        `json:"test_time"`
 }
 
 // Attributes represents product attributes stored in JSON
